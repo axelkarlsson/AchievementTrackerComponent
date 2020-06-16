@@ -11,5 +11,6 @@ namespace LiveSplit.UI.Components
         public AchievementTrackerInternalComponent(string informationName, string informationValue) : base(informationName, informationValue)
         {
         }
+
     }
 }
