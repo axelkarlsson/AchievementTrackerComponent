@@ -17,9 +17,9 @@ namespace LiveSplit.UI.Components
 
         public string UpdateName => ComponentName;
 
-        public string XMLURL => "";
+        public string XMLURL => this.UpdateURL + "MomodoraAchievementTracker/MomodoraAchievementTracker/update.MomodoraAchievementTracker.xml";
 
-        public string UpdateURL => "";
+        public string UpdateURL => "https://raw.githubusercontent.com/axelkarlsson/AchievementTrackerComponent/master/";
 
         public Version Version => Version.Parse("1.0.0");
 
