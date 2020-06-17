@@ -32,7 +32,15 @@ namespace LiveSplit.UI.Components
                 
                 AchievementLabelList.Add(new SimpleLabel(i % 2 == 1 ? "Super test" : "Other thing"));
             }
-            Console.Write(AchievementLabelList.Count);
+            AchievementLabelList[1].Text = "Deathless";
+            AchievementLabelList[3].Text = "Pacifist";
+            AchievementLabelList[5].Text = "Explorer";
+            AchievementLabelList[7].Text = "Shroom";
+            AchievementLabelList[9].Text = "Bugs Delivered";
+            AchievementLabelList[11].Text = "Choir";
+            AchievementLabelList[13].Text = "Vitality Fragments";
+            AchievementLabelList[15].Text = "Insane Difficulty";
+            AchievementLabelList[17].Text = "True End";
         }
 
         public string ComponentName => "Momodora Achievement Tracker";
@@ -61,8 +69,6 @@ namespace LiveSplit.UI.Components
 
         public void UpdateTrackers(double deaths, double roomsVisited, double commonEnemiesKilled, double difficulty, double bugsDelivered, double shroomDelivered, double greenLeaf, double maxHealth, double choir, double bugCount, double shroomFound)
         {
-            AchievementLabelList[4].Text = "YES";
-            Console.WriteLine("We are in here");
             //0 good, 1+ bad
             AchievementLabelList[0].Text = (deaths == 0) ? "Deathless" : "Not Deathless";
 	        //0 good, 1+ bad
@@ -111,13 +117,15 @@ namespace LiveSplit.UI.Components
 
                 AchievementLabelList[i].Width = width - AchievementLabelList[i + 1].ActualWidth - 10;
                 AchievementLabelList[i].Height = VerticalHeight;
-                AchievementLabelList[i].X = 5;
+                //X should proably be based on the actualwidth or something I dunno
+                AchievementLabelList[i].X = 100;
+                //The 5 should probably be based on fontsize
                 AchievementLabelList[i].Y = i*5;
 
                 AchievementLabelList[i + 1].Width = AchievementLabelList[i + 1].IsMonospaced ? width - 12 : width - 10;
                 AchievementLabelList[i + 1].Height = VerticalHeight;
                 AchievementLabelList[i + 1].Y = i*5;
-                AchievementLabelList[i + 1].X = 80;
+                AchievementLabelList[i + 1].X = 5;
 
                 PrepareDraw(state, LayoutMode.Vertical, i);
 
@@ -161,7 +169,10 @@ namespace LiveSplit.UI.Components
 
         public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
-            invalidator.Invalidate(0, 0, width, height);
+            if (invalidator != null)
+            {
+                invalidator.Invalidate(0, 0, width, height);
+            }
         }
     }
 }
