@@ -122,7 +122,6 @@ update
 	{
 		vars.Splits.Clear();
 		vars.yeet = false;
-		print(""+settings["achievementTracker"]);
 		if(vars.AchievementComponent == null && settings["achievementTracker"]){
 			vars.FindAchievementComponent(game);
 		}
