@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -14,22 +15,18 @@ namespace LiveSplit.UI.Components
     {
         public AchievementTrackerInternalComponent InternalComponent { get; set; }
         public List<SimpleLabel> AchievementLabelList { get; protected set; }
-        public SimpleLabel ValueLabel { get; protected set; }
-        protected SimpleLabel NameMeasureLabel { get; set; }
-        public string LongestString { get; set; }
+        public LiveSplitState state;
 
         public AchievementTrackerComponent(LiveSplitState state)
         {
             AchievementLabelList = new List<SimpleLabel>();
             InternalComponent = new AchievementTrackerInternalComponent("Test", "Double test");
-            ValueLabel = new SimpleLabel("Yeah");
-            NameMeasureLabel = new SimpleLabel("AWwwwwwwww yeahhhhhhhhhhh");
-
             //Should be based on how many achievements are set to be tracked in the thing
             //2 labels each, 1 for achievement name, 1 for status 9 total for now
+            this.state = state;
             for (int i = 0; i < 18; i++)
             {
-                
+
                 AchievementLabelList.Add(new SimpleLabel(i % 2 == 1 ? "Super test" : "Other thing"));
             }
             AchievementLabelList[1].Text = "Deathless";
@@ -45,13 +42,13 @@ namespace LiveSplit.UI.Components
 
         public string ComponentName => "Momodora Achievement Tracker";
 
-        public float HorizontalWidth => InternalComponent.HorizontalWidth;
+        public float HorizontalWidth { get; set; }
 
         public float MinimumHeight => InternalComponent.MinimumHeight;
 
-        public float VerticalHeight => 100;
+        public float VerticalHeight { get; set; }
 
-        public float MinimumWidth => InternalComponent.MinimumWidth;
+        public float MinimumWidth => 200;
 
         public float PaddingTop => 1;
 
@@ -95,11 +92,14 @@ namespace LiveSplit.UI.Components
 
         public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
         {
-            InternalComponent.DrawVertical(g, state, height, clipRegion);
+            throw new NotImplementedException();
         }
 
         public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
         {
+
+            var textHeight = 0.7f * Math.Max(g.MeasureString("A", AchievementLabelList[1].Font).Height, g.MeasureString("A", AchievementLabelList[0].Font).Height);
+            VerticalHeight = (textHeight * 9) * 0.9f;
             for (int i = 0; i < 18; i += 2)
             {
                 AchievementLabelList[i].ShadowColor = state.LayoutSettings.ShadowsColor;
@@ -109,23 +109,19 @@ namespace LiveSplit.UI.Components
                 AchievementLabelList[i + 1].OutlineColor = state.LayoutSettings.TextOutlineColor;
                 AchievementLabelList[i + 1].ForeColor = state.LayoutSettings.TextColor;
 
-                var textHeight = 0.75f * Math.Max(g.MeasureString("A", AchievementLabelList[i + 1].Font).Height, g.MeasureString("A", AchievementLabelList[0].Font).Height);
-
-                NameMeasureLabel.Text = LongestString;
-                NameMeasureLabel.SetActualWidth(g);
                 AchievementLabelList[i + 1].SetActualWidth(g);
+                AchievementLabelList[i].SetActualWidth(g);
 
-                AchievementLabelList[i].Width = width - AchievementLabelList[i + 1].ActualWidth - 10;
+                AchievementLabelList[i].Width = width;
                 AchievementLabelList[i].Height = VerticalHeight;
-                //X should proably be based on the actualwidth or something I dunno
-                AchievementLabelList[i].X = 100;
-                //The 5 should probably be based on fontsize
-                AchievementLabelList[i].Y = i*5;
-
-                AchievementLabelList[i + 1].Width = AchievementLabelList[i + 1].IsMonospaced ? width - 12 : width - 10;
+                //AchievementLabelWidth needs to be scaled or another width that is not the layout width needs to be used as base
+                AchievementLabelList[i].X = 0;
+                AchievementLabelList[i].Y = i*textHeight*0.42f - (3.5f * textHeight);
+ 
+                AchievementLabelList[i + 1].Width = AchievementLabelList[i + 1].ActualWidth;
                 AchievementLabelList[i + 1].Height = VerticalHeight;
-                AchievementLabelList[i + 1].Y = i*5;
-                AchievementLabelList[i + 1].X = 5;
+                AchievementLabelList[i + 1].Y = i*textHeight * 0.42f - (3.5f * textHeight);
+                AchievementLabelList[i + 1].X = 0;
 
                 PrepareDraw(state, LayoutMode.Vertical, i);
 
@@ -136,13 +132,13 @@ namespace LiveSplit.UI.Components
         }
 
         public void PrepareDraw(LiveSplitState state, LayoutMode mode, int i) {
-            NameMeasureLabel.Font = state.LayoutSettings.TextFont;
             AchievementLabelList[i + 1].Font = state.LayoutSettings.TextFont;
             AchievementLabelList[i].Font = state.LayoutSettings.TextFont;
             if (mode == LayoutMode.Vertical)
             {
-                AchievementLabelList[i].VerticalAlignment = StringAlignment.Near;
-                AchievementLabelList[i + 1].VerticalAlignment = StringAlignment.Near;
+                AchievementLabelList[i].VerticalAlignment = StringAlignment.Center;
+                AchievementLabelList[i].HorizontalAlignment = StringAlignment.Far;
+                AchievementLabelList[i + 1].VerticalAlignment = StringAlignment.Center;
             }
             else
             {
