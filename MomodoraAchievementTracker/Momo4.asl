@@ -40,7 +40,6 @@ startup
 	// SETTINGS START //
 	settings.Add("100%Check", false, "100% Run");
 	settings.Add("splits", true, "All Splits");
-
 	settings.Add("edea", true, "Edea", "splits");
 	settings.Add("lubella1", true, "Lubella 1", "splits");
 	settings.Add("gardenKey", false, "Garden Key", "splits");
@@ -63,6 +62,7 @@ startup
 	settings.Add("choir", false, "Choir", "splits");
 	settings.Add("yeet", false, "Yeet", "splits");
 	settings.SetToolTip("100%Check", "If checked, will only split for Queen if Choir is defeated, 17 vitality fragments were obtained, and 20 bug ivories were collected.");
+	settings.Add("achievementTracker", false, "All Achievements Run");
 	// SETTINGS END //
 	
 	vars.CreateAchievementComponent = (Func<dynamic>)(() =>
@@ -113,7 +113,9 @@ init
 	vars.AchievementComponent = null;
 
 	vars.activeSlot = 0;
-	vars.FindAchievementComponent(game);
+	if(settings["achievementTracker"]){
+		vars.FindAchievementComponent(game);
+	}
 }
 
 update
@@ -157,7 +159,9 @@ update
 
 	// Update all MemoryWatchers in vars.Flags
 	new List<MemoryWatcher<double>>(vars.Flags.Values).ForEach((Action<MemoryWatcher<double>>)(mw => mw.Update(game)));
-	vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
+	if (settings["achievementTracker"]){
+		vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
+	}
 }
 
 start
