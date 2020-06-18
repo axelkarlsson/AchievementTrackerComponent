@@ -7,27 +7,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using LiveSplit.ComponentUtil;
 using LiveSplit.Model;
+
 
 namespace LiveSplit.UI.Components
 {
     public class AchievementTrackerComponent : IComponent
     {
-        public AchievementTrackerInternalComponent InternalComponent { get; set; }
         public List<SimpleLabel> AchievementLabelList { get; protected set; }
         public LiveSplitState state;
+        private int activeSlot = 10;
+        private HashSet<String> completedAchievements;
+
 
         public AchievementTrackerComponent(LiveSplitState state)
         {
             AchievementLabelList = new List<SimpleLabel>();
-            InternalComponent = new AchievementTrackerInternalComponent("Test", "Double test");
-            //Should be based on how many achievements are set to be tracked in the thing
-            //2 labels each, 1 for achievement name, 1 for status 9 total for now
+            state.OnStart += onStart;
             this.state = state;
             for (int i = 0; i < 18; i++)
             {
 
-                AchievementLabelList.Add(new SimpleLabel(i % 2 == 1 ? "Super test" : "Other thing"));
+                AchievementLabelList.Add(new SimpleLabel(i % 2 == 1 ? "Achievement" : "Value"));
             }
             AchievementLabelList[1].Text = "Deathless";
             AchievementLabelList[3].Text = "Pacifist";
@@ -38,13 +40,23 @@ namespace LiveSplit.UI.Components
             AchievementLabelList[13].Text = "Vitality Fragments";
             AchievementLabelList[15].Text = "Insane Difficulty";
             AchievementLabelList[17].Text = "True End";
+
+            completedAchievements = new HashSet<string>();
+
+        }
+
+        void onStart(object sender, EventArgs e)
+        {
+            activeSlot = 1; //Should be based on what is read from memory
+            completedAchievements.Clear();
+            //Lock to slot, reset completed achievements
         }
 
         public string ComponentName => "Momodora Achievement Tracker";
 
         public float HorizontalWidth { get; set; }
 
-        public float MinimumHeight => InternalComponent.MinimumHeight;
+        public float MinimumHeight => 10;
 
         public float VerticalHeight { get; set; }
 
@@ -54,9 +66,9 @@ namespace LiveSplit.UI.Components
 
         public float PaddingBottom => 1;
 
-        public float PaddingLeft => InternalComponent.PaddingLeft;
+        public float PaddingLeft => 1;
 
-        public float PaddingRight => InternalComponent.PaddingRight;
+        public float PaddingRight => 1;
 
         public IDictionary<string, Action> ContextMenuControls => null;
 
@@ -68,24 +80,47 @@ namespace LiveSplit.UI.Components
         {
             //0 good, 1+ bad
             AchievementLabelList[0].Text = (deaths == 0) ? "Deathless" : "Not Deathless";
+
 	        //0 good, 1+ bad
 		    AchievementLabelList[2].Text = (commonEnemiesKilled == 0) ? "Pacifist" : "Murderer";
-		    //454 Done
-			//if (roomsVisited == 454) { vars.achievedDict[name] = true; }
+
+            //454 Done
+            if (roomsVisited == 454)
+            {
+                completedAchievements.Add(AchievementLabelList[3].Text);
+            }
             AchievementLabelList[4].Text = (roomsVisited == 454) ? "Explored" : String.Format("{0}/454", roomsVisited);
-		    //1 done
-			//if (current.ShroomDelivered == 1) { vars.achievedDict[name] = true; }
+
+            //1 done
+            if (shroomDelivered == 1)
+            {
+                completedAchievements.Add(AchievementLabelList[7].Text);
+            }
             AchievementLabelList[6].Text = (shroomDelivered == 1) ? "Delivered" : ((shroomFound == 1) ? "Not Delivered" : "Not Found");
-			//if (bugsDelivered == 1) { vars.achievedDict[name] = true; }
+
             //1 done in BugsDelivered, BugCount is how many are collected
+            if (bugsDelivered == 1)
+            {
+                completedAchievements.Add(AchievementLabelList[9].Text);
+            }
             AchievementLabelList[8].Text = (bugsDelivered == 1) ? "Delivered" : String.Format("{0}/20", bugCount);
-		    //1 done
-     		//if (choir == 1) { vars.achievedDict[name] = true; }
+
+            //1 done
+            if (choir == 1)
+            {
+                completedAchievements.Add(AchievementLabelList[11].Text);
+            }
             AchievementLabelList[10].Text = (choir == 1) ? "Killed" : "Alive";
-			//if (maxHealth == 18) { vars.achievedDict[name] = true; }
+
             //17 is done, tracks maxhealth and insane starts with 1 so max health is 18, -1 means 17 fragments
+            if (maxHealth == 18)
+            {
+                completedAchievements.Add(AchievementLabelList[13].Text);
+            }
             AchievementLabelList[12].Text = String.Format("{0}/17", maxHealth - 1);
+
 		    AchievementLabelList[14].Text = (difficulty == 4) ? "Insane" : "Not insane";
+
 		    AchievementLabelList[16].Text = (greenLeaf == 1) ? "True End" : "Normal End";
         }
 

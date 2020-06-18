@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="AchievementTrackerComponent.cs" />
     <Compile Include="AchievementTrackerComponentFactory.cs" />
-    <Compile Include="AchievementTrackerInternalComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -89,7 +89,9 @@ startup
 			       vars.CreateAchievementComponent();
 			}
 	});
-
+	
+	vars.AchievementComponent = null;
+	print("How often does this run?");
 }
 
 init
@@ -110,9 +112,11 @@ init
 	});
 
 	vars.yeet = new bool();
-	vars.AchievementComponent = null;
+	if(settings["achievementTracker"]){
+		vars.FindAchievementComponent(game);
+	}
 
-	vars.activeSlot = 0;
+	vars.activeSlot = 10;
 }
 
 update
@@ -122,10 +126,8 @@ update
 	{
 		vars.Splits.Clear();
 		vars.yeet = false;
-		if(vars.AchievementComponent == null && settings["achievementTracker"]){
-			vars.FindAchievementComponent(game);
-		}
-		if (settings["achievementTracker"]){
+
+		if (settings["achievementTracker"] && current.InGame == 1){
 			vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
 		}
 	}
@@ -162,7 +164,7 @@ update
 
 	// Update all MemoryWatchers in vars.Flags
 	new List<MemoryWatcher<double>>(vars.Flags.Values).ForEach((Action<MemoryWatcher<double>>)(mw => mw.Update(game)));
-
+	
 	if (settings["achievementTracker"] && vars.activeSlot == current.SaveSlot){
 		vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
 	}
