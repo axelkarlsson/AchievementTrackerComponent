@@ -113,9 +113,6 @@ init
 	vars.AchievementComponent = null;
 
 	vars.activeSlot = 0;
-	if(settings["achievementTracker"]){
-		vars.FindAchievementComponent(game);
-	}
 }
 
 update
@@ -125,6 +122,10 @@ update
 	{
 		vars.Splits.Clear();
 		vars.yeet = false;
+		print(""+settings["achievementTracker"]);
+		if(vars.AchievementComponent == null && settings["achievementTracker"]){
+			vars.FindAchievementComponent(game);
+		}
 	}
 
 	// Initialize flags when the flags pointer gets initialized/changes, or we load up LiveSplit while in-game
