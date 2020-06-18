@@ -62,36 +62,7 @@ startup
 	settings.Add("choir", false, "Choir", "splits");
 	settings.Add("yeet", false, "Yeet", "splits");
 	settings.SetToolTip("100%Check", "If checked, will only split for Queen if Choir is defeated, 17 vitality fragments were obtained, and 20 bug ivories were collected.");
-	settings.Add("achievementTracker", false, "All Achievements Run");
 	// SETTINGS END //
-	
-	vars.CreateAchievementComponent = (Func<dynamic>)(() =>
-	{
-		var textComponentAssembly = Assembly.LoadFrom("Components\\MomodoraAchievementTracker.dll");
-		dynamic textComponent = Activator.CreateInstance(textComponentAssembly.GetType("LiveSplit.UI.Components.AchievementTrackerComponent"), timer);
-        timer.Layout.LayoutComponents.Add(new LiveSplit.UI.Components.LayoutComponent("MomodoraAchievementTracker.dll", textComponent as LiveSplit.UI.Components.IComponent));
-		vars.AchievementComponent = textComponent;
-		return textComponent;
-    	});
-		
-	vars.FindAchievementComponent = (Action<Process>)((proc) =>
-	{
-		bool componentFound = false;
-		foreach (dynamic component in timer.Layout.Components)
-			{
-				if (component.GetType().Name == "AchievementTrackerComponent"){
-					vars.AchievementComponent = component;
-					componentFound = true;
-				}
-			}
-			if(!componentFound)
-			{
-			       vars.CreateAchievementComponent();
-			}
-	});
-	
-	vars.AchievementComponent = null;
-	print("How often does this run?");
 }
 
 init
@@ -112,11 +83,6 @@ init
 	});
 
 	vars.yeet = new bool();
-	if(settings["achievementTracker"]){
-		vars.FindAchievementComponent(game);
-	}
-
-	vars.activeSlot = 10;
 }
 
 update
@@ -126,10 +92,6 @@ update
 	{
 		vars.Splits.Clear();
 		vars.yeet = false;
-
-		if (settings["achievementTracker"] && current.InGame == 1){
-			vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
-		}
 	}
 
 	// Initialize flags when the flags pointer gets initialized/changes, or we load up LiveSplit while in-game
@@ -164,19 +126,11 @@ update
 
 	// Update all MemoryWatchers in vars.Flags
 	new List<MemoryWatcher<double>>(vars.Flags.Values).ForEach((Action<MemoryWatcher<double>>)(mw => mw.Update(game)));
-	
-	if (settings["achievementTracker"] && vars.activeSlot == current.SaveSlot){
-		vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
-	}
 }
 
 start
 {
-	if(old.DifficultySelector > 0 && current.DifficultySelector == 0)
-	{
-		vars.activeSlot = current.SaveSlot;
-		return true;
-	}
+	return (old.DifficultySelector > 0 && current.DifficultySelector == 0);
 }
 
 reset

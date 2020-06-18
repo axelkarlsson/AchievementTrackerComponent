@@ -19,6 +19,20 @@ namespace LiveSplit.UI.Components
         public LiveSplitState state;
         private int activeSlot = 10;
         private HashSet<String> completedAchievements;
+        private Process game;
+      
+        DeepPointer deathsPointer;
+        DeepPointer roomsVisitedPointer;
+        DeepPointer commonEnemiesKilledPointer;
+        DeepPointer diccifultyPointer;
+        DeepPointer bugsDeliveredPointer;
+        DeepPointer shroomDeliveredPointer;
+        DeepPointer greenLeafPointer;
+        DeepPointer maxHealthPointer;
+        DeepPointer choirPointer;
+        DeepPointer bugCountPointer;
+        DeepPointer saveSlotPointer;
+        DeepPointer shroomFoundPointer;
 
 
         public AchievementTrackerComponent(LiveSplitState state)
@@ -28,7 +42,6 @@ namespace LiveSplit.UI.Components
             this.state = state;
             for (int i = 0; i < 18; i++)
             {
-
                 AchievementLabelList.Add(new SimpleLabel(i % 2 == 1 ? "Achievement" : "Value"));
             }
             AchievementLabelList[1].Text = "Deathless";
@@ -43,12 +56,34 @@ namespace LiveSplit.UI.Components
 
             completedAchievements = new HashSet<string>();
 
+            deathsPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x540 });
+            roomsVisitedPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x870 });
+            commonEnemiesKilledPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x490 });
+            diccifultyPointer = new DeepPointer(0x0230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x630 }); 
+            bugsDeliveredPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x7C0 });
+            shroomDeliveredPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x500 });
+            greenLeafPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x600 });
+            maxHealthPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0xA0 });
+            choirPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x6A0 }); 
+            bugCountPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x3C0 });
+            saveSlotPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0xFA0 }); 
+            shroomFoundPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x480 });
+            game = Process.GetProcessesByName("MomodoraRUtM")[0];
         }
 
         void onStart(object sender, EventArgs e)
         {
             activeSlot = 1; //Should be based on what is read from memory
             completedAchievements.Clear();
+            Trace.WriteLine(game.MainModule.BaseAddress);
+            Trace.WriteLine("found shroom " + shroomFoundPointer.Deref<double>(game));
+            Trace.WriteLine("rooms " + roomsVisitedPointer.Deref<double>(game));
+            Trace.WriteLine("enemies " + commonEnemiesKilledPointer.Deref<double>(game));
+            Trace.WriteLine("deaths " + deathsPointer.Deref<double>(game));
+            Trace.WriteLine("save " + saveSlotPointer.Deref<double>(game));
+            Trace.WriteLine("mhealth " + maxHealthPointer.Deref<double>(game));
+            Trace.WriteLine("bugs " + bugCountPointer.Deref<double>(game));
+            Trace.WriteLine("diff " + diccifultyPointer.Deref<double>(game));
             //Lock to slot, reset completed achievements
         }
 
