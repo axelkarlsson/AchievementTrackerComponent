@@ -125,6 +125,9 @@ update
 		if(vars.AchievementComponent == null && settings["achievementTracker"]){
 			vars.FindAchievementComponent(game);
 		}
+		if (settings["achievementTracker"]){
+			vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
+		}
 	}
 
 	// Initialize flags when the flags pointer gets initialized/changes, or we load up LiveSplit while in-game
@@ -159,7 +162,8 @@ update
 
 	// Update all MemoryWatchers in vars.Flags
 	new List<MemoryWatcher<double>>(vars.Flags.Values).ForEach((Action<MemoryWatcher<double>>)(mw => mw.Update(game)));
-	if (settings["achievementTracker"]){
+
+	if (settings["achievementTracker"] && vars.activeSlot == current.SaveSlot){
 		vars.AchievementComponent.UpdateTrackers(current.Deaths, current.RoomsVisited, current.CommonEnemiesKilled, current.Difficulty, current.BugsDelivered, current.ShroomDelivered, current.GreenLeaf, current.MaxHealth, current.Choir, current.BugCount, current.ShroomFound);
 	}
 }
