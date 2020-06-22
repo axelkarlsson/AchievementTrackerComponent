@@ -49,10 +49,10 @@ namespace LiveSplit.UI.Components
             AchievementLabelList[3].Text = "Pacifist";
             AchievementLabelList[5].Text = "Explorer";
             AchievementLabelList[7].Text = "Shroom";
-            AchievementLabelList[9].Text = "Bugs Delivered";
+            AchievementLabelList[9].Text = "Bug Collector";
             AchievementLabelList[11].Text = "Choir";
             AchievementLabelList[13].Text = "Vitality Fragments";
-            AchievementLabelList[15].Text = "Insane Difficulty";
+            AchievementLabelList[15].Text = "Difficulty";
             AchievementLabelList[17].Text = "True End";
 
             completedAchievements = new HashSet<string>();
@@ -79,8 +79,6 @@ namespace LiveSplit.UI.Components
                 activeSlot = saveSlotPointer.Deref<double>(gameProc);
             }
             completedAchievements.Clear();
-
-            //Lock to slot, reset completed achievements
         }
 
         private void onReset(object sender, TimerPhase value)
@@ -113,78 +111,144 @@ namespace LiveSplit.UI.Components
         {
         }
 
+   
+        //Read values regarding achievements from memory and update the display
         public void UpdateTrackers()
         {
             if (VerifyProcessRunning() && (activeSlot == 10 || activeSlot == saveSlotPointer.Deref<double>(gameProc)))
             {
                 //0 good, 1+ bad
-                AchievementLabelList[0].Text = (deathsPointer.Deref<double>(gameProc) == 0) ? "Deathless" : "Not Deathless";
+                if(deathsPointer.Deref<double>(gameProc) == 0)
+                {
+                    AchievementLabelList[0].Text = "Deathless";
+                    //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                }
+                else
+                {
+                    AchievementLabelList[0].Text = "Not Deathless";
+                    //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
+                }
 
                 //0 good, 1+ bad
-                AchievementLabelList[2].Text = (commonEnemiesKilledPointer.Deref<double>(gameProc) == 0) ? "Pacifist" : "Murderer";
+                if (commonEnemiesKilledPointer.Deref<double>(gameProc) == 0)
+                {
+                    AchievementLabelList[0].Text = "Pacifist";
+                    //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                }
+                else
+                {
+                    AchievementLabelList[0].Text = "Murderer";
+                    //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
+                }
 
-                if (completedAchievements.Contains(AchievementLabelList[3].Text))
+                if (!completedAchievements.Contains(AchievementLabelList[3].Text))
                 {
                     double roomsVisited = roomsVisitedPointer.Deref<double>(gameProc);
                     //454 Done
+                    AchievementLabelList[4].Text = (roomsVisited == 454) ? "Explored" : String.Format("{0}/454", roomsVisited);
                     if (roomsVisited == 454)
                     {
                         completedAchievements.Add(AchievementLabelList[3].Text);
+                        AchievementLabelList[4].Text = "Explored";
+                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
                     }
-                    AchievementLabelList[4].Text = (roomsVisited == 454) ? "Explored" : String.Format("{0}/454", roomsVisited);
+                    else
+                    {
+                        AchievementLabelList[4].Text = String.Format("{0}/454", roomsVisited);
+                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                    }
                 }
 
                 //1 done
-                if (completedAchievements.Contains(AchievementLabelList[7].Text))
+                if (!completedAchievements.Contains(AchievementLabelList[7].Text))
                 {
 
                     double shroomDelivered = shroomDeliveredPointer.Deref<double>(gameProc);
                     if (shroomDelivered == 1)
                     {
                         completedAchievements.Add(AchievementLabelList[7].Text);
+                        AchievementLabelList[6].Text = "Delivered";
+                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
                     }
-
-                    AchievementLabelList[6].Text = (shroomDelivered == 1) ? "Delivered" : ((shroomFoundPointer.Deref<double>(gameProc) == 1) ? "Not Delivered" : "Not Found");
+                    else
+                    {
+                        AchievementLabelList[6].Text = (shroomFoundPointer.Deref<double>(gameProc) == 1) ? "Not Delivered" : "Not Found";
+                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                    }
                 }
 
 
-                if (completedAchievements.Contains(AchievementLabelList[9].Text))
+                if (!completedAchievements.Contains(AchievementLabelList[9].Text))
                 {
                     //1 done in BugsDelivered, BugCount is how many are collected
                     double bugsDelivered = bugsDeliveredPointer.Deref<double>(gameProc);
                     if (bugsDelivered == 1)
                     {
                         completedAchievements.Add(AchievementLabelList[9].Text);
+                        AchievementLabelList[8].Text = "Delivered";
+                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
                     }
-                    AchievementLabelList[8].Text = (bugsDelivered == 1) ? "Delivered" : String.Format("{0}/20", bugCountPointer.Deref<double>(gameProc));
+                    else
+                    {
+                        AchievementLabelList[8].Text = String.Format("{0}/20", bugCountPointer.Deref<double>(gameProc));
+                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                    }
                 }
 
-                if (completedAchievements.Contains(AchievementLabelList[11].Text))
+                if (!completedAchievements.Contains(AchievementLabelList[11].Text))
                 {
                     //1 done
                     double choir = choirPointer.Deref<double>(gameProc);
                     if (choir == 1)
                     {
                         completedAchievements.Add(AchievementLabelList[11].Text);
+                        AchievementLabelList[10].Text = "Killed";
+                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
                     }
-                    AchievementLabelList[10].Text = (choir == 1) ? "Killed" : "Alive";
+                    else
+                    {
+                        AchievementLabelList[10].Text = "Alive";
+                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                    }
                 }
 
-                if (completedAchievements.Contains(AchievementLabelList[9].Text))
+                if (!completedAchievements.Contains(AchievementLabelList[9].Text))
                 {
                     //17 is done, tracks maxhealth and insane starts with 1 so max health is 18, -1 means 17 fragments
                     double maxHealth = maxHealthPointer.Deref<double>(gameProc);
                     if (maxHealth == 18)
                     {
                         completedAchievements.Add(AchievementLabelList[13].Text);
-
+                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                    }
+                    else
+                    {
+                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
                     }
                     AchievementLabelList[12].Text = String.Format("{0}/17", maxHealth - 1);
                 }
 
-                AchievementLabelList[14].Text = (diccifultyPointer.Deref<double>(gameProc) == 4) ? "Insane" : "Not insane";
+                if(diccifultyPointer.Deref<double>(gameProc) == 4)
+                {
+                    AchievementLabelList[14].Text = "Insane";
+                    //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                }
+                else
+                {
+                    AchievementLabelList[14].Text = "Not insane";
+                    //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
+                }
 
-                AchievementLabelList[16].Text = (greenLeafPointer.Deref<double>(gameProc) == 1) ? "True End" : "Normal End";
+                if (greenLeafPointer.Deref<double>(gameProc) == 1)
+                {
+                    AchievementLabelList[16].Text = "True End";
+                    //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                }
+                else
+                {
+                    AchievementLabelList[16].Text = "Normal End";
+                    //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                }
             }
         }
 
@@ -197,8 +261,8 @@ namespace LiveSplit.UI.Components
         public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
         {
 
-            var textHeight = 0.7f * Math.Max(g.MeasureString("A", AchievementLabelList[1].Font).Height, g.MeasureString("A", AchievementLabelList[0].Font).Height);
-            VerticalHeight = (textHeight * 9) * 0.9f;
+            var textHeight = g.MeasureString("A", state.LayoutSettings.TextFont).Height;
+            VerticalHeight = textHeight * 9;
             for (int i = 0; i < 18; i += 2)
             {
                 AchievementLabelList[i].ShadowColor = state.LayoutSettings.ShadowsColor;
@@ -211,13 +275,13 @@ namespace LiveSplit.UI.Components
                 AchievementLabelList[i + 1].SetActualWidth(g);
                 AchievementLabelList[i].SetActualWidth(g);
 
-                AchievementLabelList[i].Width = width;
+                AchievementLabelList[i].Width = AchievementLabelList[i].ActualWidth;
                 AchievementLabelList[i].Height = VerticalHeight;
-                //AchievementLabelWidth needs to be scaled or another width that is not the layout width needs to be used as base
-                AchievementLabelList[i].X = 0;
+                AchievementLabelList[i].X = width - AchievementLabelList[i].ActualWidth;
                 AchievementLabelList[i].Y = i*textHeight*0.42f - (3.5f * textHeight);
- 
-                AchievementLabelList[i + 1].Width = AchievementLabelList[i + 1].ActualWidth;
+
+                //Changing to width here seemed to solve the issue of some text not fully displaying
+                AchievementLabelList[i + 1].Width = width; //AchievementLabelList[i + 1].ActualWidth;
                 AchievementLabelList[i + 1].Height = VerticalHeight;
                 AchievementLabelList[i + 1].Y = i*textHeight * 0.42f - (3.5f * textHeight);
                 AchievementLabelList[i + 1].X = 0;
