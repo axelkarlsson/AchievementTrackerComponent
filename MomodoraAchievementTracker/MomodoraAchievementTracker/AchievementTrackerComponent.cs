@@ -123,45 +123,64 @@ namespace LiveSplit.UI.Components
                 //0 good, 1+ bad
                 AchievementLabelList[2].Text = (commonEnemiesKilledPointer.Deref<double>(gameProc) == 0) ? "Pacifist" : "Murderer";
 
-                double roomsVisited = roomsVisitedPointer.Deref<double>(gameProc);
-                //454 Done
-                if (roomsVisited == 454)
+                if (completedAchievements.Contains(AchievementLabelList[3].Text))
                 {
-                    completedAchievements.Add(AchievementLabelList[3].Text);
+                    double roomsVisited = roomsVisitedPointer.Deref<double>(gameProc);
+                    //454 Done
+                    if (roomsVisited == 454)
+                    {
+                        completedAchievements.Add(AchievementLabelList[3].Text);
+                    }
+                    AchievementLabelList[4].Text = (roomsVisited == 454) ? "Explored" : String.Format("{0}/454", roomsVisited);
                 }
-                AchievementLabelList[4].Text = (roomsVisited == 454) ? "Explored" : String.Format("{0}/454", roomsVisited);
 
                 //1 done
-                double shroomDelivered = shroomDeliveredPointer.Deref<double>(gameProc);
-                if (shroomDelivered == 1)
+                if (completedAchievements.Contains(AchievementLabelList[7].Text))
                 {
-                    completedAchievements.Add(AchievementLabelList[7].Text);
-                }
-                AchievementLabelList[6].Text = (shroomDelivered == 1) ? "Delivered" : ((shroomFoundPointer.Deref<double>(gameProc) == 1) ? "Not Delivered" : "Not Found");
 
-                //1 done in BugsDelivered, BugCount is how many are collected
-                double bugsDelivered = bugsDeliveredPointer.Deref<double>(gameProc);
-                if (bugsDelivered == 1)
-                {
-                    completedAchievements.Add(AchievementLabelList[9].Text);
-                }
-                AchievementLabelList[8].Text = (bugsDelivered == 1) ? "Delivered" : String.Format("{0}/20", bugCountPointer.Deref<double>(gameProc));
+                    double shroomDelivered = shroomDeliveredPointer.Deref<double>(gameProc);
+                    if (shroomDelivered == 1)
+                    {
+                        completedAchievements.Add(AchievementLabelList[7].Text);
+                    }
 
-                //1 done
-                double choir = choirPointer.Deref<double>(gameProc);
-                if (choir == 1)
-                {
-                    completedAchievements.Add(AchievementLabelList[11].Text);
+                    AchievementLabelList[6].Text = (shroomDelivered == 1) ? "Delivered" : ((shroomFoundPointer.Deref<double>(gameProc) == 1) ? "Not Delivered" : "Not Found");
                 }
-                AchievementLabelList[10].Text = (choir == 1) ? "Killed" : "Alive";
 
-                //17 is done, tracks maxhealth and insane starts with 1 so max health is 18, -1 means 17 fragments
-                double maxHealth = maxHealthPointer.Deref<double>(gameProc);
-                if (maxHealth == 18)
+
+                if (completedAchievements.Contains(AchievementLabelList[9].Text))
                 {
-                    completedAchievements.Add(AchievementLabelList[13].Text);
+                    //1 done in BugsDelivered, BugCount is how many are collected
+                    double bugsDelivered = bugsDeliveredPointer.Deref<double>(gameProc);
+                    if (bugsDelivered == 1)
+                    {
+                        completedAchievements.Add(AchievementLabelList[9].Text);
+                    }
+                    AchievementLabelList[8].Text = (bugsDelivered == 1) ? "Delivered" : String.Format("{0}/20", bugCountPointer.Deref<double>(gameProc));
                 }
-                AchievementLabelList[12].Text = String.Format("{0}/17", maxHealth - 1);
+
+                if (completedAchievements.Contains(AchievementLabelList[11].Text))
+                {
+                    //1 done
+                    double choir = choirPointer.Deref<double>(gameProc);
+                    if (choir == 1)
+                    {
+                        completedAchievements.Add(AchievementLabelList[11].Text);
+                    }
+                    AchievementLabelList[10].Text = (choir == 1) ? "Killed" : "Alive";
+                }
+
+                if (completedAchievements.Contains(AchievementLabelList[9].Text))
+                {
+                    //17 is done, tracks maxhealth and insane starts with 1 so max health is 18, -1 means 17 fragments
+                    double maxHealth = maxHealthPointer.Deref<double>(gameProc);
+                    if (maxHealth == 18)
+                    {
+                        completedAchievements.Add(AchievementLabelList[13].Text);
+
+                    }
+                    AchievementLabelList[12].Text = String.Format("{0}/17", maxHealth - 1);
+                }
 
                 AchievementLabelList[14].Text = (diccifultyPointer.Deref<double>(gameProc) == 4) ? "Insane" : "Not insane";
 
