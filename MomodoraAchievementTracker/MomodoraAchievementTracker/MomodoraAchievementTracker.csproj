@@ -57,11 +57,14 @@
     <Compile Include="AchievementTrackerComponentSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="AchivementTrackerComponentSettingsDesigner.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AchievementTrackerComponentSettings.resx">
-      <DependentUpon>AchievementTrackerComponentSettings.cs</DependentUpon>
+    <EmbeddedResource Include="AchivementTrackerComponentSettingsDesigner.resx">
+      <DependentUpon>AchivementTrackerComponentSettingsDesigner.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

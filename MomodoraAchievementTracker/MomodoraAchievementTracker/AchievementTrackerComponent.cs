@@ -20,6 +20,7 @@ namespace LiveSplit.UI.Components
         private Process gameProc = null;
         private double activeSlot = 10;
         private HashSet<String> completedAchievements;
+        private AchievementTrackerComponentSettings settingsControl;
 
         DeepPointer deathsPointer;
         DeepPointer roomsVisitedPointer;
@@ -69,6 +70,8 @@ namespace LiveSplit.UI.Components
             bugCountPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x3C0 });
             saveSlotPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0xFA0 });
             shroomFoundPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x480 });
+
+            settingsControl = new AchievementTrackerComponentSettings();
         }
 
 
@@ -115,7 +118,8 @@ namespace LiveSplit.UI.Components
         //Read values regarding achievements from memory and update the display
         public void UpdateTrackers()
         {
-            if (VerifyProcessRunning() && (activeSlot == 10 || activeSlot == saveSlotPointer.Deref<double>(gameProc)))
+            //Add a check for in game
+            if (VerifyProcessRunning() && (activeSlot == 10 || activeSlot == saveSlotPointer.Deref<double>(gameProc))) // && levelId thingy need to get pointer and compare to main menu
             {
                 //0 good, 1+ bad
                 if(deathsPointer.Deref<double>(gameProc) == 0)
@@ -132,23 +136,23 @@ namespace LiveSplit.UI.Components
                 //0 good, 1+ bad
                 if (commonEnemiesKilledPointer.Deref<double>(gameProc) == 0)
                 {
-                    AchievementLabelList[0].Text = "Pacifist";
+                    AchievementLabelList[2].Text = "Pacifist";
                     //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
                 }
                 else
                 {
-                    AchievementLabelList[0].Text = "Murderer";
+                    AchievementLabelList[2].Text = "Murderer";
                     //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
                 }
 
-                if (!completedAchievements.Contains(AchievementLabelList[3].Text))
+                if (!completedAchievements.Contains(AchievementLabelList[5].Text))
                 {
                     double roomsVisited = roomsVisitedPointer.Deref<double>(gameProc);
                     //454 Done
                     AchievementLabelList[4].Text = (roomsVisited == 454) ? "Explored" : String.Format("{0}/454", roomsVisited);
                     if (roomsVisited == 454)
                     {
-                        completedAchievements.Add(AchievementLabelList[3].Text);
+                        completedAchievements.Add(AchievementLabelList[5].Text);
                         AchievementLabelList[4].Text = "Explored";
                         //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
                     }
@@ -212,7 +216,7 @@ namespace LiveSplit.UI.Components
                     }
                 }
 
-                if (!completedAchievements.Contains(AchievementLabelList[9].Text))
+                if (!completedAchievements.Contains(AchievementLabelList[13].Text))
                 {
                     //17 is done, tracks maxhealth and insane starts with 1 so max health is 18, -1 means 17 fragments
                     double maxHealth = maxHealthPointer.Deref<double>(gameProc);
@@ -318,7 +322,7 @@ namespace LiveSplit.UI.Components
 
         public Control GetSettingsControl(LayoutMode mode)
         {
-            return new Control();
+            return settingsControl;
         }
 
         public void SetSettings(XmlNode settings)
