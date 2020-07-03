@@ -17,6 +17,15 @@ state("MomodoraRUtM", "v1.05b Steam")
 	double Lubella : 0x231138C, 0x8, 0x140, 0x4, 0xCA0;
 	//double Frida : 0x231138C, 0x34, 0x13C, 0x4, 0x1210;
 	double currentHealth : 0x02304CEC, 0x4, 0x0;
+	
+	//Various flags to allow for All Achievements splitting
+	double Deaths : 0x02304CE8, 0x4, 0x540;
+	double RoomsVisited : 0x02304CE8, 0x4, 0x870;
+	double CommonEnemiesKilled : 0x02304CE8, 0x4, 0x60, 0x4, 0x4, 0x490;
+	double Difficulty : 0x0230C440, 0x0, 0x4, 0x60, 0x4, 0x4, 0x630;
+	double BugsDelivered : 0x230C440, 0x0, 0x4, 0x60, 0x4, 0x4, 0x7C0;
+	double ShroomDelivered : 0x02304CE8, 0x4, 0x60, 0x4, 0x4, 0x500;
+	double GreenLeaf : 0x230C440, 0x0, 0x4, 0x60, 0x4, 0x4, 0x600;
 }
 
 startup
@@ -46,6 +55,8 @@ startup
 	settings.Add("choir", false, "Choir", "splits");
 	settings.Add("yeet", false, "Yeet", "splits");
 	settings.SetToolTip("100%Check", "If checked, will only split for Queen if Choir is defeated, 17 vitality fragments were obtained, and 20 bug ivories were collected.");
+	settings.Add("achievements", false, "All Achievements");
+	settings.SetToolTip("achievements", "If checked, will split once when all achievements have been achieved. Requires queen split to work.");
 	// SETTINGS END //
 }
 
@@ -66,6 +77,20 @@ init
 			   vars.Flags["ivoryBugs"].Current == 20;
 	});
 
+	vars.AllAchievementsCheck = (Func<bool>) (() =>
+	{
+		return vars.Flags["choir"].Current == 1 && 
+			   vars.Flags["vitalityFragments"].Current == 17 && 
+			   vars.Flags["ivoryBugs"].Current == 20 &&
+			   current.GreenLeaf == 1 &&
+			   current.Difficulty == 4 &&
+			   current.Deaths == 0 &&
+			   current.RoomsVisited == 454 &&
+			   curent.BugsDelivered == 1 &&
+			   current.ShroomDelivered == 1 &&
+			   vars.Splits.Contains("queen")
+	});
+	
 	vars.yeet = new bool();
 	vars.listTest = new List<String>();
 }
@@ -213,6 +238,17 @@ split
 			
 			vars.Splits.Add("yeet");
 			return settings["yeet"];
+		}
+		
+		//All achievements
+		if(settings["achievements"] && vars.AllAchievementsCheck()){
+			if(vars.Splits.Contains("achievements"))
+			{
+				return false;
+			}
+			
+			vars.Splits.Add("achievements");
+			return true;
 		}
 	}
 }

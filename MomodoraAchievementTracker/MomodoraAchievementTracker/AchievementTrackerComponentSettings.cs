@@ -13,18 +13,35 @@ namespace LiveSplit.UI.Components
         public Color inProgressColor { get; set; }
         public Color failedColor { get; set; }
         public Color completedColor { get; set; }
-        private ColorDialog inProgressColorPicker;
-        private ColorDialog failedColorPicker;
-        private ColorDialog completedColorPicker;
+
+        public Color valueOutlineColor { get; set; }
+        public Color valueShadowColor { get; set; }
+        public Color valueTextColor { get; set; }
+
+        public Color labelOutlineColor { get; set; }
+        public Color labelShadowColor { get; set; }
+        public Color labelTextColor { get; set; }
+
+        private ColorDialog colorPicker;
 
 
         public AchievementTrackerComponentSettings()
         {
             InitializeComponent();
 
-            inProgressColorPicker = new ColorDialog();
-            failedColorPicker = new ColorDialog();
-            completedColorPicker = new ColorDialog();
+            colorPicker = new ColorDialog();
+
+            labelOutlineBtn.DataBindings.Add("BackColor", this, "labelOutlineColor", false, DataSourceUpdateMode.OnPropertyChanged);
+            labelShadowsBtn.DataBindings.Add("BackColor", this, "labelShadowColor", false, DataSourceUpdateMode.OnPropertyChanged);
+            labelTextBtn.DataBindings.Add("BackColor", this, "labelTextColor", false, DataSourceUpdateMode.OnPropertyChanged);
+
+            valuesOutlinesBtn.DataBindings.Add("BackColor", this, "valueOutlineColor", false, DataSourceUpdateMode.OnPropertyChanged);
+            valuesShadowBtn.DataBindings.Add("BackColor", this, "valueShadowColor", false, DataSourceUpdateMode.OnPropertyChanged);
+            valuesTextBtn.DataBindings.Add("BackColor", this, "valueTextColor", false, DataSourceUpdateMode.OnPropertyChanged);
+
+            progressColorBtn.DataBindings.Add("BackColor", this, "inProgressColor", false, DataSourceUpdateMode.OnPropertyChanged);
+            failedColorBtn.DataBindings.Add("BackColor", this, "failedColor",false, DataSourceUpdateMode.OnPropertyChanged);
+            completedColorBtn.DataBindings.Add("BackColor", this, "completedColor",false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
 
@@ -36,17 +53,26 @@ namespace LiveSplit.UI.Components
 
         private void labelOutlineBtn_Click(object sender, EventArgs e)
         {
-
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                labelOutlineColor = colorPicker.Color;
+            }
         }
 
         private void labelTextBtn_Click(object sender, EventArgs e)
         {
-
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                labelTextColor = colorPicker.Color;
+            }
         }
 
         private void labelShadowsBtn_Click(object sender, EventArgs e)
         {
-
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                labelShadowColor = colorPicker.Color;
+            }
         }
         #endregion
 
@@ -58,17 +84,26 @@ namespace LiveSplit.UI.Components
 
         private void valuesOutlinesBtn_Click(object sender, EventArgs e)
         {
-
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                valueOutlineColor = colorPicker.Color;
+            }
         }
 
         private void valuesTextBtn_Click(object sender, EventArgs e)
         {
-
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                valueTextColor = colorPicker.Color;
+            }
         }
 
         private void valuesShadowBtn_Click(object sender, EventArgs e)
         {
-
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                valueShadowColor = colorPicker.Color;
+            }
         }
         #endregion
 
@@ -90,28 +125,25 @@ namespace LiveSplit.UI.Components
 
         private void progressColorBtn_Click(object sender, EventArgs e)
         {
-            if (inProgressColorPicker.ShowDialog() == DialogResult.OK)
+            if (colorPicker.ShowDialog() == DialogResult.OK)
             {
-                progressColorBtn.BackColor = inProgressColorPicker.Color;
-                inProgressColor = inProgressColorPicker.Color;
+                inProgressColor = colorPicker.Color;
             }
         }
 
         private void failedColorBtn_Click(object sender, EventArgs e)
         {
-            if (failedColorPicker.ShowDialog() == DialogResult.OK)
+            if (colorPicker.ShowDialog() == DialogResult.OK)
             {
-                failedColorBtn.BackColor = failedColorPicker.Color;
-                failedColor = failedColorPicker.Color;
+                failedColor = colorPicker.Color;
             }
         }
 
         private void completedColorBtn_Click(object sender, EventArgs e)
         {
-            if (completedColorPicker.ShowDialog() == DialogResult.OK)
+            if (colorPicker.ShowDialog() == DialogResult.OK)
             {
-                completedColorBtn.BackColor = completedColorPicker.Color;
-                completedColor = completedColorPicker.Color;
+                completedColor = colorPicker.Color;
             }
         }
         #endregion
