@@ -458,6 +458,7 @@ namespace LiveSplit.UI.Components
             this.Controls.Add(this.groupBox1);
             this.Name = "AchievementTrackerComponentSettings";
             this.Size = new System.Drawing.Size(459, 427);
+            this.Load += new System.EventHandler(this.AchievementTrackerComponentSettings_Load);
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

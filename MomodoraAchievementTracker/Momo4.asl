@@ -86,9 +86,9 @@ init
 			   current.Difficulty == 4 &&
 			   current.Deaths == 0 &&
 			   current.RoomsVisited == 454 &&
-			   curent.BugsDelivered == 1 &&
+			   current.BugsDelivered == 1 &&
 			   current.ShroomDelivered == 1 &&
-			   vars.Splits.Contains("queen")
+			   vars.Splits.Contains("queen");
 	});
 	
 	vars.yeet = new bool();

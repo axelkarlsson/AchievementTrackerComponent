@@ -125,11 +125,12 @@ namespace LiveSplit.UI.Components
                 if(deathsPointer.Deref<double>(gameProc) == 0)
                 {
                     AchievementLabelList[0].Text = "Deathless";
-                    //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                    SetTextColor(0, settingsControl.completedColor);
                 }
                 else
                 {
                     AchievementLabelList[0].Text = "Not Deathless";
+                    SetTextColor(0, settingsControl.failedColor);
                     //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
                 }
 
@@ -137,12 +138,12 @@ namespace LiveSplit.UI.Components
                 if (commonEnemiesKilledPointer.Deref<double>(gameProc) == 0)
                 {
                     AchievementLabelList[2].Text = "Pacifist";
-                    //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                    SetTextColor(2, settingsControl.completedColor);
                 }
                 else
                 {
                     AchievementLabelList[2].Text = "Murderer";
-                    //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
+                    SetTextColor(2, settingsControl.failedColor);
                 }
 
                 if (!completedAchievements.Contains(AchievementLabelList[5].Text))
@@ -154,12 +155,12 @@ namespace LiveSplit.UI.Components
                     {
                         completedAchievements.Add(AchievementLabelList[5].Text);
                         AchievementLabelList[4].Text = "Explored";
-                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                        SetTextColor(4, settingsControl.completedColor);
                     }
                     else
                     {
                         AchievementLabelList[4].Text = String.Format("{0}/454", roomsVisited);
-                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                        SetTextColor(4, settingsControl.inProgressColor);
                     }
                 }
 
@@ -172,12 +173,12 @@ namespace LiveSplit.UI.Components
                     {
                         completedAchievements.Add(AchievementLabelList[7].Text);
                         AchievementLabelList[6].Text = "Delivered";
-                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                        SetTextColor(6, settingsControl.completedColor);
                     }
                     else
                     {
                         AchievementLabelList[6].Text = (shroomFoundPointer.Deref<double>(gameProc) == 1) ? "Not Delivered" : "Not Found";
-                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                        SetTextColor(6, settingsControl.inProgressColor);
                     }
                 }
 
@@ -190,12 +191,12 @@ namespace LiveSplit.UI.Components
                     {
                         completedAchievements.Add(AchievementLabelList[9].Text);
                         AchievementLabelList[8].Text = "Delivered";
-                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                        SetTextColor(8, settingsControl.completedColor);
                     }
                     else
                     {
                         AchievementLabelList[8].Text = String.Format("{0}/20", bugCountPointer.Deref<double>(gameProc));
-                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                        SetTextColor(8, settingsControl.inProgressColor);
                     }
                 }
 
@@ -207,12 +208,12 @@ namespace LiveSplit.UI.Components
                     {
                         completedAchievements.Add(AchievementLabelList[11].Text);
                         AchievementLabelList[10].Text = "Killed";
-                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                        SetTextColor(10, settingsControl.completedColor);
                     }
                     else
                     {
                         AchievementLabelList[10].Text = "Alive";
-                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                        SetTextColor(10, settingsControl.inProgressColor);
                     }
                 }
 
@@ -223,11 +224,11 @@ namespace LiveSplit.UI.Components
                     if (maxHealth == 18)
                     {
                         completedAchievements.Add(AchievementLabelList[13].Text);
-                        //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                        SetTextColor(12, settingsControl.completedColor);
                     }
                     else
                     {
-                        //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                        SetTextColor(12, settingsControl.inProgressColor);
                     }
                     AchievementLabelList[12].Text = String.Format("{0}/17", maxHealth - 1);
                 }
@@ -235,27 +236,33 @@ namespace LiveSplit.UI.Components
                 if(diccifultyPointer.Deref<double>(gameProc) == 4)
                 {
                     AchievementLabelList[14].Text = "Insane";
-                    //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                    SetTextColor(14, settingsControl.completedColor);
                 }
                 else
                 {
                     AchievementLabelList[14].Text = "Not insane";
-                    //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
+                    SetTextColor(14, settingsControl.failedColor);
                 }
 
                 if (greenLeafPointer.Deref<double>(gameProc) == 1)
                 {
                     AchievementLabelList[16].Text = "True End";
-                    //AchievementLabelList[0].ForeColor = <SETTING_COMPLETED_COLOUR>
+                    SetTextColor(16, settingsControl.completedColor);
                 }
                 else
                 {
                     AchievementLabelList[16].Text = "Normal End";
-                    //AchievementLabelList[0].ForeColor = <SETTING_PROGRESS_COLOUR>
+                    SetTextColor(16, settingsControl.inProgressColor);
                 }
             }
         }
 
+
+        private void SetTextColor(int index, Color achievementColor)
+        {
+            AchievementLabelList[index].ForeColor = settingsControl.doColorValues ? achievementColor : (settingsControl.valueColorOverride ? settingsControl.valueTextColor : state.LayoutSettings.TextColor);
+            AchievementLabelList[index + 1].ForeColor = settingsControl.doColorLabels ? achievementColor : (settingsControl.labelColorOverride ? settingsControl.labelTextColor : state.LayoutSettings.TextColor);
+        }
 
         public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
         {
@@ -267,14 +274,15 @@ namespace LiveSplit.UI.Components
 
             var textHeight = g.MeasureString("A", state.LayoutSettings.TextFont).Height;
             VerticalHeight = textHeight * 9;
+
+            //i are for values, i+1 are the labels
             for (int i = 0; i < 18; i += 2)
             {
-                AchievementLabelList[i].ShadowColor = state.LayoutSettings.ShadowsColor;
-                AchievementLabelList[i].OutlineColor = state.LayoutSettings.TextOutlineColor;
-                AchievementLabelList[i].ForeColor = state.LayoutSettings.TextColor;
-                AchievementLabelList[i + 1].ShadowColor = state.LayoutSettings.ShadowsColor;
-                AchievementLabelList[i + 1].OutlineColor = state.LayoutSettings.TextOutlineColor;
-                AchievementLabelList[i + 1].ForeColor = state.LayoutSettings.TextColor;
+                //Text Color should be moved to somewhere where I can check achievement progress as well
+                AchievementLabelList[i].ShadowColor = settingsControl.valueColorOverride ? settingsControl.valueShadowColor : state.LayoutSettings.ShadowsColor;
+                AchievementLabelList[i].OutlineColor = settingsControl.valueColorOverride ? settingsControl.valueOutlineColor : state.LayoutSettings.TextOutlineColor;
+                AchievementLabelList[i + 1].ShadowColor = settingsControl.labelColorOverride ? settingsControl.labelShadowColor : state.LayoutSettings.ShadowsColor;
+                AchievementLabelList[i + 1].OutlineColor = settingsControl.labelColorOverride ? settingsControl.labelOutlineColor : state.LayoutSettings.TextOutlineColor;
 
                 AchievementLabelList[i + 1].SetActualWidth(g);
                 AchievementLabelList[i].SetActualWidth(g);
@@ -301,6 +309,7 @@ namespace LiveSplit.UI.Components
         public void PrepareDraw(LiveSplitState state, LayoutMode mode, int i) {
             AchievementLabelList[i + 1].Font = state.LayoutSettings.TextFont;
             AchievementLabelList[i].Font = state.LayoutSettings.TextFont;
+
             if (mode == LayoutMode.Vertical)
             {
                 AchievementLabelList[i].VerticalAlignment = StringAlignment.Center;
