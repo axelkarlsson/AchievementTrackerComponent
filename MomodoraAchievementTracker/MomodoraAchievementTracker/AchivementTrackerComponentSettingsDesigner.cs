@@ -203,7 +203,7 @@ namespace LiveSplit.UI.Components
             this.labelOutlineBtn.Size = new System.Drawing.Size(23, 23);
             this.labelOutlineBtn.TabIndex = 2;
             this.labelOutlineBtn.UseVisualStyleBackColor = true;
-            this.labelOutlineBtn.Click += new System.EventHandler(this.labelOutlineBtn_Click);
+            this.labelOutlineBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // label8
             // 
@@ -222,7 +222,7 @@ namespace LiveSplit.UI.Components
             this.labelTextBtn.Size = new System.Drawing.Size(23, 23);
             this.labelTextBtn.TabIndex = 3;
             this.labelTextBtn.UseVisualStyleBackColor = true;
-            this.labelTextBtn.Click += new System.EventHandler(this.labelTextBtn_Click);
+            this.labelTextBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // label9
             // 
@@ -241,7 +241,7 @@ namespace LiveSplit.UI.Components
             this.labelShadowsBtn.Size = new System.Drawing.Size(23, 23);
             this.labelShadowsBtn.TabIndex = 4;
             this.labelShadowsBtn.UseVisualStyleBackColor = true;
-            this.labelShadowsBtn.Click += new System.EventHandler(this.labelShadowsBtn_Click);
+            this.labelShadowsBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // valueColorGroup
             // 
@@ -294,7 +294,7 @@ namespace LiveSplit.UI.Components
             this.valuesOutlinesBtn.Size = new System.Drawing.Size(23, 23);
             this.valuesOutlinesBtn.TabIndex = 2;
             this.valuesOutlinesBtn.UseVisualStyleBackColor = true;
-            this.valuesOutlinesBtn.Click += new System.EventHandler(this.valuesOutlinesBtn_Click);
+            this.valuesOutlinesBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // label6
             // 
@@ -313,7 +313,7 @@ namespace LiveSplit.UI.Components
             this.valuesTextBtn.Size = new System.Drawing.Size(23, 23);
             this.valuesTextBtn.TabIndex = 3;
             this.valuesTextBtn.UseVisualStyleBackColor = true;
-            this.valuesTextBtn.Click += new System.EventHandler(this.valuesTextBtn_Click);
+            this.valuesTextBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // label5
             // 
@@ -332,7 +332,7 @@ namespace LiveSplit.UI.Components
             this.valuesShadowBtn.Size = new System.Drawing.Size(23, 23);
             this.valuesShadowBtn.TabIndex = 4;
             this.valuesShadowBtn.UseVisualStyleBackColor = true;
-            this.valuesShadowBtn.Click += new System.EventHandler(this.valuesShadowBtn_Click);
+            this.valuesShadowBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // achievementColorGroup
             // 
@@ -403,7 +403,7 @@ namespace LiveSplit.UI.Components
             this.progressColorBtn.Size = new System.Drawing.Size(23, 23);
             this.progressColorBtn.TabIndex = 2;
             this.progressColorBtn.UseVisualStyleBackColor = true;
-            this.progressColorBtn.Click += new System.EventHandler(this.progressColorBtn_Click);
+            this.progressColorBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // failedColorBtn
             // 
@@ -412,7 +412,7 @@ namespace LiveSplit.UI.Components
             this.failedColorBtn.Size = new System.Drawing.Size(23, 23);
             this.failedColorBtn.TabIndex = 3;
             this.failedColorBtn.UseVisualStyleBackColor = true;
-            this.failedColorBtn.Click += new System.EventHandler(this.failedColorBtn_Click);
+            this.failedColorBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // completedColorBtn
             // 
@@ -421,7 +421,7 @@ namespace LiveSplit.UI.Components
             this.completedColorBtn.Size = new System.Drawing.Size(23, 23);
             this.completedColorBtn.TabIndex = 4;
             this.completedColorBtn.UseVisualStyleBackColor = true;
-            this.completedColorBtn.Click += new System.EventHandler(this.completedColorBtn_Click);
+            this.completedColorBtn.Click += new System.EventHandler(this.ColorButtonClick);
             // 
             // label1
             // 

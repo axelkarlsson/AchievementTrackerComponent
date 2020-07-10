@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace LiveSplit.UI.Components
 {
@@ -73,6 +74,11 @@ namespace LiveSplit.UI.Components
             achievementColorCheckbox_CheckedChanged(null, null);
         }
 
+        private void ColorButtonClick(object sender, EventArgs e)
+        {
+            SettingsHelper.ColorButtonClick((Button)sender, this);
+        }
+
         #region Label Color
         private void overrideLabelCheckbox_CheckedChanged(object sender, EventArgs e)
         {
@@ -101,6 +107,7 @@ namespace LiveSplit.UI.Components
             {
                 labelShadowColor = colorPicker.Color;
             }
+            
         }
         #endregion
 
@@ -138,10 +145,7 @@ namespace LiveSplit.UI.Components
         #region Achievement Colors
         private void achievementColorCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            colorValuesCheckbox.Checked = false;
-            colorLabelsCheckbox.Checked = false;
-            colorValuesCheckbox.Enabled = colorLabelsCheckbox.Enabled = label1.Enabled = label2.Enabled = label3.Enabled = progressColorBtn.Enabled = failedColorBtn.Enabled = completedColorBtn.Enabled = achievementColorCheckbox.Checked;
-            
+            colorValuesCheckbox.Enabled = colorLabelsCheckbox.Enabled = label1.Enabled = label2.Enabled = label3.Enabled = progressColorBtn.Enabled = failedColorBtn.Enabled = completedColorBtn.Enabled = achievementColorCheckbox.Checked;        
         }
 
         private void colorLabelsCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -175,8 +179,48 @@ namespace LiveSplit.UI.Components
             if (colorPicker.ShowDialog() == DialogResult.OK)
             {
                 completedColor = colorPicker.Color;
+                SettingsHelper.ColorButtonClick((Button)sender, this);
             }
         }
         #endregion
+
+        public void SetSettings(XmlNode settings)
+        {
+            var element = (XmlElement)settings;
+            inProgressColor = SettingsHelper.ParseColor(element["inProgressColor"]);
+            failedColor = SettingsHelper.ParseColor(element["failedColor"]);
+            completedColor = SettingsHelper.ParseColor(element["completedColor"]);
+            valueOutlineColor = SettingsHelper.ParseColor(element["valueOutlineColor"]);
+            valueShadowColor = SettingsHelper.ParseColor(element["valueShadowColor"]);
+            valueTextColor = SettingsHelper.ParseColor(element["valueTextColor"]);
+            labelOutlineColor = SettingsHelper.ParseColor(element["labelOutlineColor"]);
+            labelShadowColor = SettingsHelper.ParseColor(element["labelShadowColor"]);
+            labelTextColor = SettingsHelper.ParseColor(element["labelTextColor"]);
+            doColorLabels = SettingsHelper.ParseBool(element["doColorLabels"]);
+            useAchievementColor = SettingsHelper.ParseBool(element["useAchievementColor"]);
+            doColorValues = SettingsHelper.ParseBool(element["doColorValues"]);
+            valueColorOverride = SettingsHelper.ParseBool(element["valueColorOverride"]);
+            labelColorOverride = SettingsHelper.ParseBool(element["labelColorOverride"]);
+        }
+
+        public XmlNode GetSettings(XmlDocument document)
+        {
+            var parent = document.CreateElement("Settings");
+            SettingsHelper.CreateSetting(document, parent, "useAchievementColor", useAchievementColor);
+            SettingsHelper.CreateSetting(document, parent, "doColorValues", doColorValues);
+            SettingsHelper.CreateSetting(document, parent, "doColorLabels", doColorLabels);
+            SettingsHelper.CreateSetting(document, parent, "inProgressColor", inProgressColor);
+            SettingsHelper.CreateSetting(document, parent, "failedColor", failedColor);
+            SettingsHelper.CreateSetting(document, parent, "completedColor", completedColor);
+            SettingsHelper.CreateSetting(document, parent, "valueColorOverride", valueColorOverride);
+            SettingsHelper.CreateSetting(document, parent, "valueOutlineColor", valueOutlineColor);
+            SettingsHelper.CreateSetting(document, parent, "valueShadowColor", valueShadowColor);
+            SettingsHelper.CreateSetting(document, parent, "valueTextColor", valueTextColor);
+            SettingsHelper.CreateSetting(document, parent, "labelColorOverride", labelColorOverride);
+            SettingsHelper.CreateSetting(document, parent, "labelOutlineColor", labelOutlineColor);
+            SettingsHelper.CreateSetting(document, parent, "labelShadowColor", labelShadowColor);
+            SettingsHelper.CreateSetting(document, parent, "labelTextColor", labelTextColor);
+            return parent;
+        }
     }
 }

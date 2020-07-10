@@ -325,8 +325,7 @@ namespace LiveSplit.UI.Components
 
         public XmlNode GetSettings(XmlDocument document)
         {
-            var parent = document.CreateElement("Settings");
-            return parent;
+            return settingsControl.GetSettings(document);
         }
 
         public Control GetSettingsControl(LayoutMode mode)
@@ -336,7 +335,7 @@ namespace LiveSplit.UI.Components
 
         public void SetSettings(XmlNode settings)
         {
-
+            settingsControl.SetSettings(settings);
         }
 
  
