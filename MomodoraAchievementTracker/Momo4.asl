@@ -26,6 +26,9 @@ state("MomodoraRUtM", "v1.05b Steam")
 	double BugsDelivered : 0x230C440, 0x0, 0x4, 0x60, 0x4, 0x4, 0x7C0;
 	double ShroomDelivered : 0x02304CE8, 0x4, 0x60, 0x4, 0x4, 0x500;
 	double GreenLeaf : 0x230C440, 0x0, 0x4, 0x60, 0x4, 0x4, 0x600;
+	
+	//Just for you dististik
+	double MaxHealth : 0x2304CE8, 0x4, 0xA0;
 }
 
 startup
@@ -54,6 +57,7 @@ startup
 	settings.Add("queen", true, "Queen", "splits");
 	settings.Add("choir", false, "Choir", "splits");
 	settings.Add("yeet", false, "Yeet", "splits");
+	settings.Add("vitfrags", false, "All Vitality Fragments", "splits");
 	settings.SetToolTip("100%Check", "If checked, will only split for Queen if Choir is defeated, 17 vitality fragments were obtained, and 20 bug ivories were collected.");
 	settings.Add("achievements", false, "All Achievements");
 	settings.SetToolTip("achievements", "If checked, will split once when all achievements have been achieved. Requires queen split to work.");
@@ -140,7 +144,9 @@ update
 
 start
 {
-	return (old.DifficultySelector > 0 && current.DifficultySelector == 0);
+	return ((old.DifficultySelector > 0 && current.DifficultySelector == 0) || 
+	(current.LevelId == 21 && old.LevelId == 1) || 
+	(current.LevelId == 21 && old.currentHealth == 0));
 }
 
 reset
@@ -248,6 +254,18 @@ split
 			}
 			
 			vars.Splits.Add("achievements");
+			return true;
+		}
+		
+		//17 vit fragments
+		if(settings["vitfrags"] && current.MaxHealth == 18)
+		{
+			if(vars.Splits.Contains("vitfrags"))
+			{
+			return false;
+			}
+			
+			vars.Splits.Add("vitfrags");
 			return true;
 		}
 	}
