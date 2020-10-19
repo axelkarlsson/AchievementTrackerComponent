@@ -146,7 +146,7 @@ start
 {
 	return ((old.DifficultySelector > 0 && current.DifficultySelector == 0) || 
 	(current.LevelId == 21 && old.LevelId == 1) || 
-	(current.LevelId == 21 && old.currentHealth == 0));
+	(current.LevelId == 21 && old.CutsceneState == 0));
 }
 
 reset
