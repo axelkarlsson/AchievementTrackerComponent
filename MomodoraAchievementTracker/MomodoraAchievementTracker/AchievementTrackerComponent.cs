@@ -58,19 +58,6 @@ namespace LiveSplit.UI.Components
 
             completedAchievements = new HashSet<string>();
 
-            deathsPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x540 });
-            roomsVisitedPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x870 });
-            commonEnemiesKilledPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x490 });
-            diccifultyPointer = new DeepPointer(0x0230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x630 });
-            bugsDeliveredPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x7C0 });
-            shroomDeliveredPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x500 });
-            greenLeafPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x600 });
-            maxHealthPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0xA0 });
-            choirPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x6A0 });
-            bugCountPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x3C0 });
-            saveSlotPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0xFA0 });
-            shroomFoundPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x480 });
-
             settingsControl = new AchievementTrackerComponentSettings();
         }
 
@@ -349,7 +336,48 @@ namespace LiveSplit.UI.Components
             Process[] game = Process.GetProcessesByName("MomodoraRUtM");
             if (game.Length > 0)
             {
+                switch (game[0].MainModule.ModuleMemorySize)
+                {
+                    case 40222720:
+                        //version 1.07
+
+                        deathsPointer = new DeepPointer(0x2371EA8, new int[] { 0x4, 0x530 });
+                        roomsVisitedPointer = new DeepPointer(0x2371EAC, new int[] { 0x4, 0x880 });
+                        commonEnemiesKilledPointer = new DeepPointer(0x2371EA8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x490 });
+                        diccifultyPointer = new DeepPointer(0x2379600, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x630 });
+                        bugsDeliveredPointer = new DeepPointer(0x2371EA8, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x7C0 });
+                        shroomDeliveredPointer = new DeepPointer(0x2371EA8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x500 });
+                        greenLeafPointer = new DeepPointer(0x2371EA8, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x600 });
+                        maxHealthPointer = new DeepPointer(0x2371EA8, new int[] { 0x4, 0xA0 });
+                        choirPointer = new DeepPointer(0x2371EA8, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x6A0 });
+                        bugCountPointer = new DeepPointer(0x2371EA8, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x3C0 });
+                        saveSlotPointer = new DeepPointer(0x2371EA8, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0xFA0 });
+                        shroomFoundPointer = new DeepPointer(0x2371EA8, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x480 });
+                        break;
+
+                    case 39690240:
+                        //version 1.05b 
+
+                        deathsPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x540 });
+                        roomsVisitedPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x870 });
+                        commonEnemiesKilledPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x490 });
+                        diccifultyPointer = new DeepPointer(0x0230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x630 });
+                        bugsDeliveredPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x7C0 });
+                        shroomDeliveredPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x500 });
+                        greenLeafPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x600 });
+                        maxHealthPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0xA0 });
+                        choirPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x6A0 });
+                        bugCountPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x3C0 });
+                        saveSlotPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0xFA0 });
+                        shroomFoundPointer = new DeepPointer(0x230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x480 });
+                        break;
+                }
+
                 gameProc = game[0];
+
+
+               
+
                 return true;
             }
             return false;
