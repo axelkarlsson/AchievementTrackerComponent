@@ -23,6 +23,7 @@ namespace LiveSplit.UI.Components
         private AchievementTrackerComponentSettings settingsControl;
 
         DeepPointer deathsPointer;
+        DeepPointer deathsSavedPointer;
         DeepPointer roomsVisitedPointer;
         DeepPointer commonEnemiesKilledPointer;
         DeepPointer diccifultyPointer;
@@ -109,27 +110,28 @@ namespace LiveSplit.UI.Components
             if (VerifyProcessRunning() && (activeSlot == 10 || activeSlot == saveSlotPointer.Deref<double>(gameProc))) // && levelId thingy need to get pointer and compare to main menu
             {
                 //0 good, 1+ bad
-                if(deathsPointer.Deref<double>(gameProc) == 0)
+                double deaths = deathsPointer.Deref<double>(gameProc) + deathsSavedPointer.Deref<double>(gameProc);
+                AchievementLabelList[0].Text = "Deaths: " + deaths;
+                if (deaths == 0)
                 {
-                    AchievementLabelList[0].Text = "Deathless";
                     SetTextColor(0, settingsControl.completedColor);
                 }
                 else
                 {
-                    AchievementLabelList[0].Text = "Not Deathless";
                     SetTextColor(0, settingsControl.failedColor);
                     //AchievementLabelList[0].ForeColor = <SETTING_FAILED_COLOUR>
                 }
 
                 //0 good, 1+ bad
-                if (commonEnemiesKilledPointer.Deref<double>(gameProc) == 0)
+                double enemiesKilled = commonEnemiesKilledPointer.Deref<double>(gameProc);
+                if (enemiesKilled == 0)
                 {
                     AchievementLabelList[2].Text = "Pacifist";
                     SetTextColor(2, settingsControl.completedColor);
                 }
                 else
                 {
-                    AchievementLabelList[2].Text = "Murderer";
+                    AchievementLabelList[2].Text = String.Format("Murdered {0} enemies", enemiesKilled);
                     SetTextColor(2, settingsControl.failedColor);
                 }
 
@@ -342,6 +344,7 @@ namespace LiveSplit.UI.Components
                         //version 1.07
 
                         deathsPointer = new DeepPointer(0x2371EA8, new int[] { 0x4, 0x530 });
+                        deathsSavedPointer = new DeepPointer(0x2379600, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0xAF0 });
                         roomsVisitedPointer = new DeepPointer(0x2371EAC, new int[] { 0x4, 0x880 });
                         commonEnemiesKilledPointer = new DeepPointer(0x2371EA8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x490 });
                         diccifultyPointer = new DeepPointer(0x2379600, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x630 });
@@ -359,6 +362,7 @@ namespace LiveSplit.UI.Components
                         //version 1.05b 
 
                         deathsPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x540 });
+                        deathsSavedPointer = new DeepPointer(0x0230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0xAF0 });
                         roomsVisitedPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x870 });
                         commonEnemiesKilledPointer = new DeepPointer(0x02304CE8, new int[] { 0x4, 0x60, 0x4, 0x4, 0x490 });
                         diccifultyPointer = new DeepPointer(0x0230C440, new int[] { 0x0, 0x4, 0x60, 0x4, 0x4, 0x630 });
